@@ -18,7 +18,9 @@ import plotly.graph_objects as go
 
 
 class Smartphone:
-    def __init__(self, file_path: str, sensor: str = "inova", device: str = "inova_device"):
+    def __init__(
+        self, file_path: str, sensor: str = "inova", device: str = "inova_device"
+    ):
         self.file_path = file_path
         self.device_filter = device
         self.sensor = sensor
@@ -36,9 +38,22 @@ class Smartphone:
         )  # unique cell id key  with corresponding time and rssi value
 
         for line in data:
-            json_line_data = json.loads(line)
+            try:  # loop over corrupt lines
+                json_line_data = json.loads(line)
+            except Exception:
+                continue
+
+            try:
+                json_line_data["device"]
+            except Exception:
+                continue
+
             if json_line_data["device"] == self.device_filter:
-                cells = json_line_data["data"]["data"]["data"] # TODO:add that to normal data then later and exception 
+                cells = json_line_data["data"]
+
+                # check if recording data stored as data or data["data"]["data"]
+                if type(cells) == dict:
+                    cells = cells["data"]["data"]
 
                 # get the timestamp
                 timestamp = datetime.datetime.strptime(
@@ -54,16 +69,15 @@ class Smartphone:
                 # loop over cell in cells list
 
                 cell_ids = []
-                print(cells)
-                print(cells)
                 for cell in cells:
-                    print("letsgoo2")
-                    print(f"{cell['rssi'] =}")
-                    print(f"{type(cell['rssi']) = }")
-                    cells_dict_rssi_with_time[cell["cellUniqueId"]].append(
-                        {timestamp: cell["rssi"]}
-                    )
-                    cell_ids.append(cell["cellUniqueId"])
+                    try:
+
+                        cells_dict_rssi_with_time[cell["cellUniqueId"]].append(
+                            {timestamp: cell["rssi"]}
+                        )
+                        cell_ids.append(cell["cellUniqueId"])
+                    except Exception:
+                        continue
 
                 cell_nr_per_timestamp_unique_id.append(len(set(cell_ids)))
 
@@ -101,12 +115,10 @@ class Smartphone:
             yaxis_title="rssi[dBm]",
         )
 
-        fig_rssi.show()
+        # fig_rssi.show()
 
         return fig_rssi
 
     def main(self):
         self.load_data()
         self.show_figure()
-
-        
