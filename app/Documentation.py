@@ -19,8 +19,8 @@ from utils.sign import sign
 # ╰──────────────────────────────────────────────────────────╯
 # devices = ["5g_rpi1","5g_rpi2","5g_inova"]
 
-sign()
 st.set_page_config(page_title="Data Uploader & Viewer", layout="wide")
+sign()
 
 st.title("📊 Streamlit Application for Raw Data Analysis")
 st.markdown(
