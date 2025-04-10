@@ -20,7 +20,7 @@ def sign():
 <span style="color: black; text-decoration: none;">&copy MotionMiners GmbH</span>
 <a href="https://github.com/aetherspritee">Dustin Schauten</a>
 <a href="https://github.com/wilfer9008">Fernando Moya</a>
-<a href="">Jannik Wolff</a>
+<a href="https://github.com/jannikw">Jannik Wolff</a>
 <a href="https://github.com/rrajevan">Rajevan Raveendran</a>
 </div>
 """,
