@@ -11,13 +11,11 @@ Copyright:
 """
 
 import json
+
 import streamlit as st
+
 from utils.sign import sign
 
-# ╭──────────────────────────────────────────────────────────╮
-# │              special constant in info.json               │
-# ╰──────────────────────────────────────────────────────────╯
-# devices = ["5g_rpi1","5g_rpi2","5g_inova"]
 
 st.set_page_config(page_title="Data Uploader & Viewer", layout="wide")
 sign()
@@ -54,12 +52,30 @@ if data_paths:
             del item["raw"]
             st.markdown(f"This file contains data for: {item.keys()} ")
 
-            # TODO: check if raspi has 5g and ble data
-            # if "5g_rpi1" in item.keys():
-            #     st.markdown(f"5g_rpi1 has data collected for: {item.keys()} ")
-            #
-            # if "5g_rpi2" in item.keys():
-            #     st.markdown(f"5g_rpi1 has data collected for: {item.keys()} ")
+            for device in item.keys():
+                col1, col2 = st.columns([1, 10])
+                col2.markdown(f"**{device}**")
+                for data_type in item[device].keys():
+                    if data_type == "5g":
+                        col1, col2 = st.columns([2, 10])
+                        col2.markdown(f"**{data_type}**")
+                        col1, col2 = st.columns([3, 10])
+                        col2.code(item[device][data_type], language="text")
+                    elif data_type == "ble":
+                        col1, col2 = st.columns([2, 10])
+                        col2.markdown(f"**{data_type}**")
+                        col1, col2 = st.columns([3, 10])
+                        col2.code(item[device][data_type], language="text")
+                    elif data_type == "rssi":
+                        col1, col2 = st.columns([2, 10])
+                        col2.markdown(f"**{data_type}**")
+                        col1, col2 = st.columns([3, 10])
+                        col2.code(item[device][data_type], language="text")
+                    elif data_type == "rsrp":
+                        col1, col2 = st.columns([2, 10])
+                        col2.markdown(f"**{data_type}**")
+                        col1, col2 = st.columns([3, 10])
+                        col2.code(item[device][data_type], language="text")
 
 
 st.header("🔍 Data Visualization")
